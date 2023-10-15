@@ -1,6 +1,10 @@
 import os
+import sentry_sdk
+import logging
 
+from sentry_sdk.integrations.django import DjangoIntegration
 from pathlib import Path
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -113,3 +117,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+sentry_sdk.init(
+    dsn="https://9f91a7c9e5d4bb9829674c1435789849@o1363691.ingest.sentry.io/4506056471478272",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
