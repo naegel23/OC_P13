@@ -7,7 +7,7 @@ from . import views
 def trigger_error(_):
     _ = 1 / 0
 
-#test circle ci
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
