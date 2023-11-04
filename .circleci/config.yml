@@ -17,10 +17,11 @@ jobs:
           name: Build Docker Image
           command: |
             docker build -t my-app -f ./Dockerfile .
-
       - run:
           name: Run tests
-          command: pytest
+          command: |
+            export DJANGO_SETTINGS_MODULE=oc_lettings_site.settings
+            pytest
       - run:
           name: Run flake8
           command: flake8
