@@ -1,6 +1,5 @@
 import os
 import sentry_sdk
-from decouple import config
 
 from pathlib import Path
 
@@ -19,7 +18,6 @@ SECRET_KEY = 'fp$9^593hsriajg$_%=5trot9g!1qa@ew(o-1#@=&4%=hp46(s'
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-PORT = config('PORT', default='8000')
 
 # Application definition
 
