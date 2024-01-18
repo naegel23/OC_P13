@@ -1,28 +1,25 @@
-# Use the appropriate base image
-FROM python:3.9-slim
+# Utiliser une image de base Python officielle
+FROM python:3.8
 
-# Set environment variables
-ENV PYTHONUNBUFFERED 1
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /usr/src/app
 
-# Set working directory
-WORKDIR /app
+# Copier les fichiers de dépendances et installer les dépendances
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install dependencies
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends gcc libpq-dev \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*  # <--- Removed backslash here
+# Copier le reste du code source de l'application dans le conteneur
+COPY . .
 
-# Correct placement of COPY command
-COPY requirements.txt /app/
+# Collecter les fichiers statiques
+RUN python manage.py collectstatic --no-input
 
-# Then run pip install
-RUN pip install --upgrade pip && pip install -r requirements.txt
+# Définir la variable d'environnement pour exécuter l'application avec les paramètres par défaut
+ENV DJANGO_SETTINGS_MODULE=oc_lettings_site.settings
 
-# Continue with the rest of the Dockerfile
-COPY . /app/
+# Exposer le port sur lequel l'application va tourner
+EXPOSE 8000
 
-COPY static /path/in/container/static/
+# Démarrer l'application Django avec gunicorn
+CMD gunicorn --bind 0.0.0.0:$PORT oc_lettings_site.wsgi:application
 
-# Run gunicorn
-CMD ["gunicorn", "oc_lettings_site.wsgi:application", "--bind", "0.0.0.0:8000"]
