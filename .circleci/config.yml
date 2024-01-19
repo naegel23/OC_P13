@@ -39,6 +39,10 @@ jobs:
             echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
             docker push registry.heroku.com/oclettingsv1/web
       - run:
+          name: Install Heroku CLI
+          command: |
+            curl https://cli-assets.heroku.com/install.sh | sh
+      - run:
           name: Release to Heroku
           command: |
             heroku container:release web -a oclettingsv1
