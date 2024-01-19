@@ -26,7 +26,31 @@ jobs:
           name: Run flake8
           command: flake8
 
+  deploy:
+    executor: python/default
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build and Push Docker Image
+          command: |
+            docker build -t oclettingsv1 -f ./Dockerfile .
+            docker tag oclettingsv1 registry.heroku.com/oclettingsv1/web
+            echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+            docker push registry.heroku.com/oclettingsv1/web
+      - run:
+          name: Release to Heroku
+          command: |
+            heroku container:release web -a oclettingsv1
+
 workflows:
-  sample:
+  version: 2
+  build-deploy:
     jobs:
       - build-and-test
+      - deploy:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: main
