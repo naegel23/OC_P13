@@ -19,6 +19,10 @@ jobs:
             docker tag oclettingsv1:${CIRCLE_SHA1} $DOCKERHUB_USERNAME/oclettingsv1:${CIRCLE_SHA1}
             docker push $DOCKERHUB_USERNAME/oclettingsv1:${CIRCLE_SHA1}
       - run:
+          name: Install Heroku CLI
+          command: |
+            curl https://cli-assets.heroku.com/install.sh | sh
+      - run:
           name: Push to Heroku
           command: |
             docker tag oclettingsv1:${CIRCLE_SHA1} registry.heroku.com/oclettingsv1/web
