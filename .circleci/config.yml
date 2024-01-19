@@ -11,23 +11,23 @@ jobs:
       - setup_remote_docker
       - run:
           name: Build Docker Image
-          command: docker build -t my-app:${CIRCLE_SHA1} -f ./Dockerfile .
+          command: docker build -t oclettingsv1:${CIRCLE_SHA1} -f ./Dockerfile .
       - run:
           name: Push to Docker Hub
           command: |
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-            docker tag my-app:${CIRCLE_SHA1} $DOCKERHUB_USERNAME/my-app:${CIRCLE_SHA1}
-            docker push $DOCKERHUB_USERNAME/my-app:${CIRCLE_SHA1}
+            docker tag oclettingsv1:${CIRCLE_SHA1} $DOCKERHUB_USERNAME/oclettingsv1:${CIRCLE_SHA1}
+            docker push $DOCKERHUB_USERNAME/oclettingsv1:${CIRCLE_SHA1}
       - run:
           name: Push to Heroku
           command: |
-            docker tag my-app:${CIRCLE_SHA1} registry.heroku.com/your-heroku-app-name/web
+            docker tag oclettings:${CIRCLE_SHA1} registry.heroku.com/oclettingsv1/web
             echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
-            docker push registry.heroku.com/your-heroku-app-name/web
+            docker push registry.heroku.com/oclettingsv1/web
       - run:
           name: Release to Heroku
           command: |
-            heroku container:release web -a your-heroku-app-name
+            heroku container:release web -a oclettingsv1
 
 workflows:
   version: 2
