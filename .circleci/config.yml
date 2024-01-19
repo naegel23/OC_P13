@@ -4,57 +4,36 @@ orbs:
   python: circleci/python@1.5.0
 
 jobs:
-  build-and-test:
+  build-and-push:
     executor: python/default
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            pip install -r requirements.txt
       - setup_remote_docker
       - run:
           name: Build Docker Image
-          command: |
-            docker build -t my-app -f ./Dockerfile .
+          command: docker build -t my-app:${CIRCLE_SHA1} -f ./Dockerfile .
       - run:
-          name: Run tests
+          name: Push to Docker Hub
           command: |
-            export DJANGO_SETTINGS_MODULE=oc_lettings_site.settings
-            pytest
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker tag my-app:${CIRCLE_SHA1} $DOCKERHUB_USERNAME/my-app:${CIRCLE_SHA1}
+            docker push $DOCKERHUB_USERNAME/my-app:${CIRCLE_SHA1}
       - run:
-          name: Run flake8
-          command: flake8
-
-  deploy:
-    executor: python/default
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Build and Push Docker Image
+          name: Push to Heroku
           command: |
-            docker build -t oclettingsv1 -f ./Dockerfile .
-            docker tag oclettingsv1 registry.heroku.com/oclettingsv1/web
+            docker tag my-app:${CIRCLE_SHA1} registry.heroku.com/your-heroku-app-name/web
             echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
-            docker push registry.heroku.com/oclettingsv1/web
-      - run:
-          name: Install Heroku CLI
-          command: |
-            curl https://cli-assets.heroku.com/install.sh | sh
+            docker push registry.heroku.com/your-heroku-app-name/web
       - run:
           name: Release to Heroku
           command: |
-            heroku container:release web -a oclettingsv1
+            heroku container:release web -a your-heroku-app-name
 
 workflows:
   version: 2
-  build-deploy:
+  build-and-deploy:
     jobs:
-      - build-and-test
-      - deploy:
-          requires:
-            - build-and-test
+      - build-and-push:
           filters:
             branches:
               only: main
