@@ -112,3 +112,44 @@ Vérification sur Heroku :
 Une fois le processus de déploiement terminé, vérifiez que l'application fonctionne correctement sur Heroku.
 Accédez à l'URL de votre application Heroku pour effectuer une vérification en direct.
 En suivant ces étapes, vous devriez pouvoir déployer de nouvelles versions de l'application sans problème.
+
+### Commande à suivre pour le deploiement
+
+Configuration de l'Image Docker et Push sur Docker Hub
+Construire l'Image Docker :
+
+Ouvrez votre terminal et naviguez jusqu'au dossier racine de votre projet.
+Exécutez la commande suivante pour construire votre image Docker :
+docker build -t votre_nom_utilisateur_dockerhub/nom_image:tag .
+Remplacez votre_nom_utilisateur_dockerhub par votre nom d'utilisateur Docker Hub, nom_image par le nom que vous souhaitez donner à votre image, et tag par un tag spécifique, par exemple latest ou un identifiant de commit.
+
+Push de l'Image sur Docker Hub 
+
+Assurez-vous d'être connecté à Docker Hub. Si ce n'est pas le cas, connectez-vous avec :
+docker login --username votre_nom_utilisateur_dockerhub --password votre_mot_de_passe
+
+Poussez l'image sur Docker Hub avec la commande :
+docker push votre_nom_utilisateur_dockerhub/nom_image:tag
+
+Déploiement sur Heroku
+
+Tag de l'Image pour Heroku 
+
+Une fois l'image Docker disponible sur Docker Hub, tagguez-la pour le Heroku Container Registry :
+docker tag votre_nom_utilisateur_dockerhub/nom_image:tag registry.heroku.com/nom_app_heroku/web
+
+Push de l'Image sur Heroku Container Registry 
+
+Connectez-vous au Container Registry de Heroku :
+heroku container:login
+
+Poussez votre image sur Heroku :
+docker push registry.heroku.com/nom_app_heroku/web
+
+Déployer l'Application sur Heroku 
+
+Utilisez la commande suivante pour lancer l'application :
+heroku container:release web -a nom_app_heroku
+
+Vérifiez que l'application fonctionne en accédant à son URL ou en utilisant :
+heroku open -a nom_app_heroku
