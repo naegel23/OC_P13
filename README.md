@@ -171,4 +171,4 @@ Remplacez port_local par le port de votre choix sur lequel vous voulez accéder 
 
 Par exemple, si votre application Docker est configurée pour écouter sur le port 80 et que vous souhaitez y accéder via le port 8080 sur votre machine locale, la commande serait :
 docker run -p 8000:8000 -e PORT=8000 utilisateur/votre_image:tag
-Après avoir exécuté cette commande, vous devriez pouvoir accéder à l'application via http://localhost:8080 dans votre navigateur.
+Après avoir exécuté cette commande, vous devriez pouvoir accéder à l'application via http://localhost:8080 dans votre navigateur ou via Docker Desktop.
