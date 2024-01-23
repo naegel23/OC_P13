@@ -158,3 +158,17 @@ heroku open -a nom_app_heroku
 Assurez-vous que toutes les configurations nécessaires pour votre application sont correctement définies, notamment les variables d'environnement sur Heroku.
 
 Les étapes ci-dessus supposent que vous avez déjà un compte Docker Hub et Heroku configuré et que vous avez installé Docker et Heroku CLI sur votre machine.
+
+Si vous souhaitez tester votre image docker en local, je vous invite à suivre les commandes suivantes: 
+vous devez d'abord la télécharger (pull) puis l'exécuter (run) avec Docker. Voici les étapes que vous pouvez suivre.
+Ouvrez un terminal sur votre machine locale.
+Téléchargez (pull) l'image Docker depuis Docker Hub :
+docker pull utilisateur/votre_image:tag
+Remplacez tag par le tag spécifique de l'image que vous souhaitez exécuter. Si vous voulez la dernière version, vous pouvez utiliser latest ou le hash du commit si vous l'avez tagué ainsi.
+Exécutez l'image Docker en tant que conteneur :
+docker run -p port_local:port_conteneur utilisateur/votre_image:tag
+Remplacez port_local par le port de votre choix sur lequel vous voulez accéder à l'application depuis votre navigateur, et port_conteneur par le port sur lequel l'application dans le conteneur est configurée pour écouter.
+
+Par exemple, si votre application Docker est configurée pour écouter sur le port 80 et que vous souhaitez y accéder via le port 8080 sur votre machine locale, la commande serait :
+docker run -p 8000:8000 -e PORT=8000 utilisateur/votre_image:tag
+Après avoir exécuté cette commande, vous devriez pouvoir accéder à l'application via http://localhost:8080 dans votre navigateur.
