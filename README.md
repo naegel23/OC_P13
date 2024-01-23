@@ -153,3 +153,8 @@ heroku container:release web -a nom_app_heroku
 
 Vérifiez que l'application fonctionne en accédant à son URL ou en utilisant :
 heroku open -a nom_app_heroku
+
+### Notes Importantes
+Assurez-vous que toutes les configurations nécessaires pour votre application sont correctement définies, notamment les variables d'environnement sur Heroku.
+
+Les étapes ci-dessus supposent que vous avez déjà un compte Docker Hub et Heroku configuré et que vous avez installé Docker et Heroku CLI sur votre machine.
