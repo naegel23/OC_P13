@@ -75,3 +75,40 @@ Utilisation de PowerShell, comme ci-dessus sauf :
 
 - Pour activer l'environnement virtuel, `.\venv\Scripts\Activate.ps1` 
 - Remplacer `which <my-command>` par `(Get-Command <my-command>).Path`
+
+### Déploiement
+
+Récapitulatif du Fonctionnement du Déploiement
+Notre application utilise un pipeline de déploiement automatisé via CircleCI qui assure la construction, le test et le déploiement de l'application sur Heroku. À chaque push dans la branche principale, CircleCI déclenche un workflow qui exécute les étapes suivantes :
+
+Construction de l'Image Docker : L'application est conteneurisée à l'aide de Docker, ce qui garantit la cohérence de l'environnement à travers les différents stades du développement et de la production.
+
+Tests : Des tests automatiques sont exécutés pour s'assurer que l'application fonctionne comme prévu.
+
+Déploiement sur Heroku : Si les tests réussissent, l'image Docker est poussée sur le Heroku Container Registry, puis déployée sur Heroku.
+
+Configuration Requise
+Pour que le déploiement fonctionne correctement, vous devez configurer les éléments suivants :
+
+CircleCI : Assurez-vous que votre projet est configuré dans CircleCI avec les variables d'environnement nécessaires. Ces variables incluent :
+
+HEROKU_API_KEY : Clé API de votre compte Heroku.
+DOCKERHUB_USERNAME et DOCKERHUB_PASS : Vos identifiants Docker Hub pour pousser des images.
+Heroku : Un compte Heroku avec une application configurée pour recevoir les déploiements. Assurez-vous que l'application Heroku est liée à votre projet CircleCI.
+
+Étapes de Déploiement
+Pour déployer la dernière version de l'application, suivez ces étapes :
+
+Mise à Jour du Code Source : Mettez à jour le code source de votre application et effectuez les tests nécessaires localement.
+
+Push sur GitHub : Poussez vos modifications sur la branche principale de votre dépôt GitHub.
+
+Automatisation via CircleCI :
+
+Le push déclenchera automatiquement le pipeline de déploiement dans CircleCI.
+Surveillez le processus dans l'interface de CircleCI pour vous assurer que toutes les étapes s'exécutent correctement.
+Vérification sur Heroku :
+
+Une fois le processus de déploiement terminé, vérifiez que l'application fonctionne correctement sur Heroku.
+Accédez à l'URL de votre application Heroku pour effectuer une vérification en direct.
+En suivant ces étapes, vous devriez pouvoir déployer de nouvelles versions de l'application sans problème.
