@@ -4,6 +4,23 @@ orbs:
   python: circleci/python@1.5.0
 
 jobs:
+  test-and-lint:
+    executor: python/default
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            pip install -r requirements.txt
+      - run:
+          name: Run tests
+          command: |
+            pytest
+      - run:
+          name: Run flake8
+          command: |
+            flake8 .
+
   build-and-push:
     executor: python/default
     steps:
@@ -11,7 +28,8 @@ jobs:
       - setup_remote_docker
       - run:
           name: Build Docker Image
-          command: docker build -t oclettingsv1:${CIRCLE_SHA1} -f ./Dockerfile .
+          command: |
+            docker build -t oclettingsv1:${CIRCLE_SHA1} -f ./Dockerfile .
       - run:
           name: Push to Docker Hub
           command: |
@@ -37,7 +55,10 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
+      - test-and-lint
       - build-and-push:
+          requires:
+            - test-and-lint
           filters:
             branches:
               only: main
