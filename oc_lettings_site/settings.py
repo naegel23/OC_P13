@@ -18,6 +18,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'admin123!')
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://oclettingsv1-cfd31daf0b15.herokuapp.com/']
 
 # Application definition
 
