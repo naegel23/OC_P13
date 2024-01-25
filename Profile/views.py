@@ -17,6 +17,16 @@ def profiles_index(request):
 
 
 def profile(request, username):
+    """
+    Récupère et affiche le profil d'un utilisateur donné.
+
+    Arguments :
+        request (HttpRequest) : L'objet HttpRequest de la requête HTTP.
+        username (str) : Le nom d'utilisateur pour lequel le profil doit être récupéré.
+
+    Retourne :
+        HttpResponse : Un objet HttpResponse avec la page de profil rendue.
+    """
     profile = Profile.objects.get(user__username=username)
     context = {'profile': profile}
     return render(request, 'profile.html', context)
